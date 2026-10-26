@@ -55,7 +55,13 @@ const PRIORITY_LABELS = { low: '低', medium: '中', high: '高', urgent: '緊�
 // ---------------------------------------------------------------------------
 // Bootstrap
 // ---------------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', init);
+// The module may finish loading (top-level await for config.js) after
+// DOMContentLoaded has already fired, so handle both cases.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
 
 async function init() {
   bindStatic();
