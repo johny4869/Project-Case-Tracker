@@ -51,6 +51,10 @@ h1,h2,h3 { line-height: 1.25; }
 .conn-badge.local { background: #eff6ff; color: #1d4ed8; }
 .conn-badge.error { background: #fef2f2; color: #b91c1c; }
 .user-area { display: flex; align-items: center; gap: .5rem; font-size: .85rem; color: var(--text-muted); }
+.setup-banner { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; padding: .7rem 1.5rem; background: #fffbeb; color: #92400e; border-bottom: 1px solid #fde68a; font-size: .85rem; }
+.setup-banner strong { font-weight: 700; }
+.setup-banner code { background: #fef3c7; padding: .05rem .3rem; border-radius: 4px; }
+.setup-banner.hidden { display: none; }
 
 /* Tabs */
 .tabs { display: flex; gap: .25rem; background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 0 1.5rem; position: sticky; top: 58px; z-index: 99; overflow-x: auto; }

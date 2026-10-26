@@ -30,6 +30,7 @@ let usingLocal = !cloudDb;
 
 const state = {
   session: null,
+  cloudReady: null,
   projectId: null,
   caseId: null,
   projects: [],
@@ -63,6 +64,15 @@ async function init() {
   if (client) {
     const { data } = await client.auth.getSession();
     state.session = data.session || null;
+    if (state.session) {
+      state.cloudReady = true;
+    } else {
+      state.cloudReady = await probeCloudReady();
+      if (!state.cloudReady) {
+        usingLocal = true;
+        db = localDb;
+      }
+    }
     client.auth.onAuthStateChange(async (_event, session) => {
       state.session = session;
       await handleAuthState();
@@ -72,6 +82,19 @@ async function init() {
   updateConnBadge();
   await handleAuthState();
   await Promise.all([loadGitLog(), loadRagReport()]);
+}
+
+async function probeCloudReady() {
+  if (!client) return false;
+  try {
+    const { error } = await client.from('projects').select('id').limit(1);
+    if (!error) return true;
+    if (error.code === 'PGRST205' || error.code === '42P01') return false;
+    if (error.status === 401 || error.status === 403) return false;
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function handleAuthState() {
@@ -90,6 +113,11 @@ async function handleAuthState() {
   // Cloud configured, not logged in, and user has not chosen local demo -> login gate.
   if (client && !state.session && !usingLocal) {
     overlay.classList.remove('hidden');
+    if (state.cloudReady === false) {
+      const msg = $('#loginMessage');
+      msg.textContent = 'Supabase 資料表尚未建立，請先執行 migration 並建立帳號；目前可改用下方本機模式。';
+      msg.className = 'login-message error';
+    }
     userArea.innerHTML = '';
     state.projects = []; state.cases = []; state.tasks = []; state.reports = [];
     state.projectId = null; state.caseId = null;
@@ -133,12 +161,19 @@ function updateConnBadge() {
     badge.textContent = 'Supabase 已登入';
     badge.className = 'conn-badge cloud';
   } else if (usingLocal) {
-    badge.textContent = '本機示範模式';
+    badge.textContent = state.cloudReady === false ? '本機模式（Supabase 未初始化）' : '本機示範模式';
     badge.className = 'conn-badge local';
   } else {
     badge.textContent = 'Supabase 未登入';
     badge.className = 'conn-badge';
   }
+  updateSetupBanner();
+}
+
+function updateSetupBanner() {
+  const banner = $('#cloudSetupBanner');
+  if (!banner) return;
+  banner.classList.toggle('hidden', !(client && state.cloudReady === false));
 }
 
 // ---------------------------------------------------------------------------
@@ -392,7 +427,9 @@ function renderReports() {
 function renderSettings() {
   $('#settingsMode').textContent = state.session
     ? 'Supabase 雲端模式'
-    : (usingLocal ? '本機示範模式（localStorage）' : 'Supabase 未登入');
+    : (usingLocal
+      ? (state.cloudReady === false ? '本機模式（Supabase 尚未建表）' : '本機示範模式（localStorage）')
+      : 'Supabase 未登入');
   $('#settingsUrl').textContent = CONFIG.SUPABASE_URL || '（未設定）';
   $('#settingsUser').textContent = state.session?.user?.email || '（未登入）';
 }

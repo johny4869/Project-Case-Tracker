@@ -355,29 +355,118 @@ export function seedDemoIfEmpty() {
   const existing = readLocal(LS.projects);
   if (existing.length > 0) return false;
 
-  const project = {
-    id: uid(), owner_id: LOCAL_OWNER, key: 'demo',
-    name: '示範專案（可刪除）', description: '本機示範資料，設定頁可一鍵清除。',
-    status: 'active', color: '#2563eb', position: 0,
-    created_at: nowIso(), updated_at: nowIso(),
-  };
-  const caseRow = {
-    id: uid(), owner_id: LOCAL_OWNER, project_id: project.id,
-    case_number: 'DEMO-001', title: '示範案件：建立第一個追蹤項目',
-    description: '這是示範案件，點進來新增子任務。',
-    status: 'in_progress', priority: 'medium', due_date: null, position: 0,
-    created_at: nowIso(), updated_at: nowIso(),
-  };
-  const tasks = [
-    ['todo', '整理需求', 0], ['in_progress', '建立子任務', 1], ['done', '完成初始設定', 2],
-  ].map(([status, title, position]) => ({
-    id: uid(), owner_id: LOCAL_OWNER, case_id: caseRow.id,
-    title, description: '', status, priority: 'medium', due_date: null,
-    position, is_done: status === 'done', created_at: nowIso(), updated_at: nowIso(),
-  }));
+  const now = nowIso();
+  const makeProject = (key, name, description, color, position) => ({
+    id: uid(), owner_id: LOCAL_OWNER, key, name, description,
+    status: 'active', color, position, created_at: now, updated_at: now,
+  });
+  const makeCase = (projectId, caseNumber, title, description, status, priority, position) => ({
+    id: uid(), owner_id: LOCAL_OWNER, project_id: projectId,
+    case_number: caseNumber, title, description, status, priority,
+    due_date: null, position, created_at: now, updated_at: now,
+  });
+  const makeTask = (caseId, title, status, priority, position, description = '') => ({
+    id: uid(), owner_id: LOCAL_OWNER, case_id: caseId,
+    title, description, status, priority, due_date: null,
+    position, is_done: status === 'done', created_at: now, updated_at: now,
+  });
 
-  writeLocal(LS.projects, [project]);
-  writeLocal(LS.cases, [caseRow]);
+  const wm = makeProject(
+    'wm',
+    'WM 流程自動化',
+    'Notes / Open WebUI → FlowAgent → flow_funcs → flow_result',
+    '#0ea5e9',
+    0,
+  );
+  const tracker = makeProject(
+    'tracker',
+    '個人專案追蹤平台',
+    '本平台建置進度（GitHub Pages + Supabase）',
+    '#7c3aed',
+    1,
+  );
+
+  const wmCases = [
+    ['WM-001', 'Notes 客戶端觸發', '從 Notes 按鈕送出案件欄位到 FlowAgent。', 'done', 'high', [
+      ['done', '確認按鈕與欄位', 'high'],
+      ['done', '整理送出格式', 'medium'],
+    ]],
+    ['WM-002', 'Open WebUI 觸發', '從 Open WebUI 發起同一條流程，驗證多入口。', 'in_progress', 'high', [
+      ['done', '建立 API 呼叫範例', 'high'],
+      ['in_progress', '帶入知識庫 ID 與提示詞', 'high'],
+      ['todo', '處理回傳格式', 'medium'],
+    ]],
+    ['WM-003', 'FlowAgent 跳板', '接收請求、檢查 trigger、分派 flow_funcs。', 'in_progress', 'urgent', [
+      ['done', '確認 trigger 條件', 'urgent'],
+      ['in_progress', '錯誤處理與重試', 'high'],
+      ['todo', '執行日誌欄位', 'medium'],
+    ]],
+    ['WM-004', 'flow_funcs 逐項執行', 'FlowRun / Trigger / FlowFinish 依序執行，例外可回復。', 'todo', 'high', [
+      ['todo', '定義執行順序', 'high'],
+      ['todo', '例外回復機制', 'high'],
+    ]],
+    ['WM-005', 'flow_result 寫回', '將結果、狀態碼與訊息寫回文件。', 'todo', 'high', [
+      ['todo', '確認寫回欄位', 'high'],
+      ['todo', '成功／失敗通知', 'medium'],
+    ]],
+    ['WM-006', 'UI / GA 顯示', '前端顯示執行進度，GA 事件回傳。', 'todo', 'medium', [
+      ['todo', '進度條與狀態', 'medium'],
+      ['todo', 'GA 事件埋點', 'low'],
+    ]],
+  ];
+
+  const trackerCases = [
+    ['Phase 0', '安全修正', '移除硬編碼 token、建立 config 範本、修正 RAG 檔名。', 'done', 'high', [
+      ['done', '移除硬編碼 GitHub Token', 'high'],
+      ['done', '建立 config.example.js / .env.example', 'high'],
+      ['done', '修正 RAG 報告檔名', 'medium'],
+    ]],
+    ['Phase 1', '資料庫設計與 SQL', '建立 schema、RLS、Storage bucket 與測試資料。', 'in_progress', 'urgent', [
+      ['done', '撰寫 supabase/migrations/0001_init.sql', 'high'],
+      ['todo', '在 Supabase SQL Editor 執行 migration', 'urgent'],
+      ['todo', '建立第一個登入帳號', 'urgent'],
+      ['todo', '驗證 RLS 與 Storage 政策', 'high'],
+    ]],
+    ['Phase 2', '前端整合 Supabase', '登入、三層 CRUD、看板與雲端驗證。', 'in_progress', 'high', [
+      ['done', '登入與三層 CRUD', 'high'],
+      ['done', '看板拖曳與排序', 'medium'],
+      ['todo', '登入後進行雲端寫入驗證', 'high'],
+    ]],
+    ['Phase 3', '附件上傳', '私有 Storage 桶、簽名網址與附件關聯。', 'done', 'medium', [
+      ['done', '上傳／列表／刪除', 'high'],
+      ['done', '簽名網址預覽', 'medium'],
+    ]],
+    ['Phase 4', '部署與設定', 'GitHub 版控、GitHub Pages 自動部署。', 'done', 'high', [
+      ['done', '建立乾淨 Git 歷史並推送', 'high'],
+      ['done', 'GitHub Pages workflow 部署成功', 'high'],
+      ['todo', '（選用）自訂網域', 'low'],
+    ]],
+    ['Phase 5', '未來擴充', 'DCTGit 同步、AI 摘要、n8n / OpenWebUI 整合。', 'todo', 'low', [
+      ['todo', 'DCTGit 同步（需公司允許）', 'low'],
+      ['todo', 'AI 自動摘要與進度分析', 'low'],
+    ]],
+  ];
+
+  const projects = [wm, tracker];
+  const cases = [];
+  const tasks = [];
+
+  const addCases = (project, specs) => {
+    let casePos = 0;
+    for (const [number, title, description, status, priority, taskSpec] of specs) {
+      const caseRow = makeCase(project.id, number, title, description, status, priority, casePos++);
+      cases.push(caseRow);
+      taskSpec.forEach(([taskStatus, taskTitle, taskPriority], index) => {
+        tasks.push(makeTask(caseRow.id, taskTitle, taskStatus, taskPriority, index));
+      });
+    }
+  };
+
+  addCases(wm, wmCases);
+  addCases(tracker, trackerCases);
+
+  writeLocal(LS.projects, projects);
+  writeLocal(LS.cases, cases);
   writeLocal(LS.tasks, tasks);
   writeLocal(LS.reports, []);
   writeLocal(LS.attachments, []);

@@ -11,6 +11,7 @@
     "build": "node scripts/gen-config.mjs",
     "test": "node scripts/test-local.mjs",
     "verify:supabase": "node scripts/verify-supabase.mjs",
+    "setup:supabase": "node scripts/setup-supabase.mjs",
     "lint": "node --check app.js && node --check src/db.js && node --check src/storage.js && node --check src/supabaseClient.js && node --check src/rag.js"
   },
   "keywords": [

@@ -62,6 +62,17 @@ npm run build        # 產生 config.js
 
 > 注意：舊式 `anon` key 與新式 `sb_publishable_...` 皆為公開金鑰，安全性由 RLS 決定。
 
+若資料表尚未建立，網站會自動以 **本機示範模式** 開啟，並在頁面上方顯示提示；
+建立資料表與帳號後重新整理，即可切換為雲端模式。
+
+也可以用 Management API 自動執行 migration（需要 Supabase Personal Access Token，
+執行後請撤銷）：
+
+```bash
+SUPABASE_ACCESS_TOKEN=sbp_xxx npm run setup:supabase
+npm run verify:supabase
+```
+
 ## 部署（GitHub Pages）
 
 Repo 推上 GitHub 後，由 [`.github/workflows/pages.yml`](.github/workflows/pages.yml) 自動建置與部署。

@@ -63,7 +63,15 @@ ok((await db.projects.list()).length === 0, 'delete project');
 // --- Seed / clear ----------------------------------------------------------
 clearLocalData();
 ok(seedDemoIfEmpty() === true, 'seed demo when empty');
-ok((await db.projects.list()).length === 1, 'seed creates project');
+const seededProjects = await db.projects.list();
+ok(seededProjects.length === 2, 'seed creates two projects');
+const wmProject = seededProjects.find((p) => p.key === 'wm');
+ok(!!wmProject, 'seed creates WM project');
+const wmCases = wmProject ? await db.cases.list(wmProject.id) : [];
+ok(wmCases.length >= 6, `seed creates WM cases (got ${wmCases.length})`);
+const firstWmCase = wmCases[0];
+const wmTasks = firstWmCase ? await db.tasks.list(firstWmCase.id) : [];
+ok(wmTasks.length >= 2, 'seed creates WM tasks');
 ok(seedDemoIfEmpty() === false, 'seed is idempotent');
 clearLocalData();
 ok((await db.projects.list()).length === 0, 'clear local data');
