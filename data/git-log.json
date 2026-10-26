@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-10-26T16:03:45.713Z",
+  "generatedAt": "2026-10-26T16:04:04.704Z",
   "count": 1,
   "commits": [
     {
-      "sha": "f6e43e8b09a206f8f93b67ca1f51df7d91924125",
-      "shortSha": "f6e43e8",
+      "sha": "62344d8136bba71b26da0739eb749691f4bb0e5a",
+      "shortSha": "62344d8",
       "author": "Johny4869",
-      "date": "2026-10-27T00:03:44+08:00",
+      "date": "2026-10-27T00:04:03+08:00",
       "subject": "Initial commit: project case tracker platform",
       "files": [
         {
@@ -151,12 +151,6 @@
           "filename": "supabase/migrations/0001_init.sql",
           "status": "added",
           "additions": 280,
-          "deletions": 0
-        },
-        {
-          "filename": "個人專案追蹤平台架構與開發路線圖.png",
-          "status": "added",
-          "additions": 0,
           "deletions": 0
         }
       ]
