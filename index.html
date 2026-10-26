@@ -22,7 +22,12 @@
 
         <div id="cloudSetupBanner" class="setup-banner hidden">
             <strong>Supabase 尚未初始化</strong>
-            <span>目前使用本機示範模式。請在 Supabase SQL Editor 執行 <code>supabase/migrations/0001_init.sql</code>，並建立登入帳號，即可切換雲端模式。</span>
+            <span>目前使用本機示範模式。完成以下兩步即可切換雲端模式：</span>
+            <span class="setup-links">
+                <a href="https://supabase.com/dashboard/project/wcxeyohzvcbwhpclplfb/sql/new" target="_blank" rel="noopener">① 開啟 SQL Editor</a>
+                <a href="https://github.com/johny4869/Project-Case-Tracker/blob/main/supabase/migrations/0001_init.sql" target="_blank" rel="noopener">查看 SQL</a>
+                <a href="https://supabase.com/dashboard/project/wcxeyohzvcbwhpclplfb/auth/users" target="_blank" rel="noopener">② 建立登入帳號</a>
+            </span>
         </div>
 
         <nav class="tabs">
