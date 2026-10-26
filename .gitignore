@@ -1,0 +1,46 @@
+# Lotus Notes databases (large binary files)
+*.nsf
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules
+node_modules/
+npm-debug.log*
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Local secrets / generated config (never commit)
+config.js
+.env
+.env.*
+!.env.example
+.dev.vars
+
+# Internal RAG report (contains internal endpoints / real work orders)
+# The public demo uses RAG驗證結果報告.example.md instead.
+RAG驗證結果報告.md
+
+# Internal architecture diagram (keep local; not needed by the site)
+個人專案追蹤平台架構與開發路線圖.png
+
+# Supabase CLI
+.supabase/
+supabase/.temp/
+supabase/.branches/
+
+# Cloudflare / Wrangler
+.wrangler/
+
+# Generated data snapshots
+# data/git-log.json is committed on purpose so the static site works without CI.

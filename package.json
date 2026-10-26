@@ -1,0 +1,31 @@
+{
+  "name": "project-case-tracker",
+  "version": "1.0.0",
+  "description": "Generic project -> case -> task tracking platform (Supabase + static frontend)",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "gitlog": "node scripts/gen-gitlog.mjs",
+    "config": "node scripts/gen-config.mjs",
+    "build": "node scripts/gen-config.mjs",
+    "test": "node scripts/test-local.mjs",
+    "verify:supabase": "node scripts/verify-supabase.mjs",
+    "lint": "node --check app.js && node --check src/db.js && node --check src/storage.js && node --check src/supabaseClient.js && node --check src/rag.js"
+  },
+  "keywords": [
+    "progress-tracking",
+    "kanban",
+    "supabase",
+    "github",
+    "rag"
+  ],
+  "author": "Project Case Tracker",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}

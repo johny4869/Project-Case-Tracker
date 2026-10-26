@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專案追蹤平台</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="brand">
+                <h1>📊 專案追蹤平台</h1>
+                <nav class="breadcrumb" id="breadcrumb"></nav>
+            </div>
+            <div class="header-actions">
+                <span class="conn-badge" id="connBadge">連線中…</span>
+                <span class="user-area" id="userArea"></span>
+                <button id="refreshBtn" class="btn btn-primary">🔄 重新整理</button>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="projects">🗂️ 專案</button>
+            <button class="tab-btn" data-tab="cases">📋 案件</button>
+            <button class="tab-btn" data-tab="tasks">✅ 子任務</button>
+            <button class="tab-btn" data-tab="files">📁 檔案異動</button>
+            <button class="tab-btn" data-tab="reports">📑 專案報告</button>
+            <button class="tab-btn" data-tab="settings">⚙️ 設定</button>
+        </nav>
+
+        <main class="main-content">
+            <!-- Projects -->
+            <section id="projects-tab" class="tab-content active">
+                <div class="toolbar">
+                    <h2>專案總覽</h2>
+                    <button id="newProjectBtn" class="btn btn-primary">+ 新增專案</button>
+                </div>
+                <div id="projectGrid" class="grid"></div>
+            </section>
+
+            <!-- Cases -->
+            <section id="cases-tab" class="tab-content">
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <button id="backToProjectsBtn" class="btn btn-ghost">← 專案</button>
+                        <h2 id="casesTitle">案件</h2>
+                    </div>
+                    <button id="newCaseBtn" class="btn btn-primary">+ 新增案件</button>
+                </div>
+                <div id="caseList" class="case-list"></div>
+            </section>
+
+            <!-- Tasks -->
+            <section id="tasks-tab" class="tab-content">
+                <div class="toolbar">
+                    <div class="toolbar-left">
+                        <button id="backToCasesBtn" class="btn btn-ghost">← 案件</button>
+                        <h2 id="tasksTitle">子任務</h2>
+                    </div>
+                    <div class="toolbar-right">
+                        <button id="caseAttachmentsBtn" class="btn btn-secondary">📎 附件</button>
+                        <button id="newTaskBtn" class="btn btn-primary">+ 新增子任務</button>
+                    </div>
+                </div>
+                <div class="kanban-board" id="kanbanBoard">
+                    <div class="kanban-column" data-status="todo">
+                        <h3>待辦 <span class="count">0</span></h3>
+                        <div class="task-list" data-status="todo"></div>
+                        <button class="add-task-btn" data-status="todo">+ 新增</button>
+                    </div>
+                    <div class="kanban-column" data-status="in_progress">
+                        <h3>進行中 <span class="count">0</span></h3>
+                        <div class="task-list" data-status="in_progress"></div>
+                        <button class="add-task-btn" data-status="in_progress">+ 新增</button>
+                    </div>
+                    <div class="kanban-column" data-status="review">
+                        <h3>待審 <span class="count">0</span></h3>
+                        <div class="task-list" data-status="review"></div>
+                        <button class="add-task-btn" data-status="review">+ 新增</button>
+                    </div>
+                    <div class="kanban-column" data-status="done">
+                        <h3>完成 <span class="count">0</span></h3>
+                        <div class="task-list" data-status="done"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Files -->
+            <section id="files-tab" class="tab-content">
+                <div class="panel">
+                    <div class="toolbar">
+                        <h2>Git 檔案異動歷史</h2>
+                        <span class="hint" id="gitLogMeta"></span>
+                    </div>
+                    <div class="filters">
+                        <input type="text" id="fileSearch" placeholder="搜尋檔案或訊息..." class="search-input">
+                        <select id="fileTypeFilter" class="filter-select">
+                            <option value="">所有類型</option>
+                            <option value=".md">Markdown</option>
+                            <option value=".js">JavaScript</option>
+                            <option value=".json">JSON</option>
+                            <option value=".html">HTML</option>
+                            <option value=".css">CSS</option>
+                            <option value=".svg">SVG</option>
+                            <option value=".png">PNG</option>
+                            <option value=".txt">Text</option>
+                        </select>
+                    </div>
+                    <div id="fileList" class="file-list"></div>
+                </div>
+            </section>
+
+            <!-- Reports -->
+            <section id="reports-tab" class="tab-content">
+                <div class="panel">
+                    <div class="toolbar">
+                        <h2>專案報告</h2>
+                        <button id="newReportBtn" class="btn btn-primary">+ 新增報告</button>
+                    </div>
+                    <div id="reportsList" class="report-list"></div>
+                </div>
+                <div class="panel">
+                    <h2>RAG 評估結果 <span class="hint" id="ragSource"></span></h2>
+                    <div class="rag-summary">
+                        <div class="metric-card"><span class="metric-value" id="ragAccuracy">--</span><span class="metric-label">最高相似度</span></div>
+                        <div class="metric-card"><span class="metric-value" id="ragTopK">--</span><span class="metric-label">Top-K</span></div>
+                        <div class="metric-card"><span class="metric-value" id="ragTestCases">--</span><span class="metric-label">測試案例</span></div>
+                    </div>
+                    <div class="rag-table-container">
+                        <table>
+                            <thead><tr><th>排名</th><th>案例編號</th><th>相似度分數</th><th>狀態</th></tr></thead>
+                            <tbody id="ragTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings -->
+            <section id="settings-tab" class="tab-content">
+                <div class="panel">
+                    <h2>連線與身分</h2>
+                    <div class="settings-grid">
+                        <div><span class="label">模式</span><strong id="settingsMode">--</strong></div>
+                        <div><span class="label">Supabase URL</span><strong id="settingsUrl">--</strong></div>
+                        <div><span class="label">目前使用者</span><strong id="settingsUser">--</strong></div>
+                    </div>
+                    <p class="hint">僅使用 Publishable Key；Secret / service_role Key 永不進入前端。資料存取由 RLS 控管。</p>
+                </div>
+                <div class="panel">
+                    <h2>資料工具</h2>
+                    <div class="btn-row">
+                        <button id="seedDemoBtn" class="btn btn-secondary">載入示範資料</button>
+                        <button id="exportDataBtn" class="btn btn-secondary">匯出本機資料</button>
+                        <label class="btn btn-secondary file-label">匯入本機資料
+                            <input type="file" id="importFile" accept="application/json" hidden>
+                        </label>
+                        <button id="reloadGitLogBtn" class="btn btn-secondary">重新載入 Git 記錄</button>
+                        <button id="clearDataBtn" class="btn btn-danger">清除本機資料</button>
+                    </div>
+                    <p class="hint">匯入／匯出與清除僅作用於本機模式資料（localStorage），不影響 Supabase。</p>
+                </div>
+                <div class="panel">
+                    <h2>關於</h2>
+                    <p class="hint">通用專案追蹤平台：專案 → 案件 → 子任務。資料存於 Supabase；程式與部署由 GitHub + Cloudflare Pages 管理。</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Login overlay -->
+    <div id="authOverlay" class="auth-overlay hidden">
+        <form id="loginForm" class="auth-card">
+            <h2>登入</h2>
+            <p class="hint" id="authModeHint">請使用已建立的帳號登入（不開放自行註冊）。</p>
+            <label>Email<input type="email" id="loginEmail" required autocomplete="username"></label>
+            <label>密碼<input type="password" id="loginPassword" required autocomplete="current-password"></label>
+            <button type="submit" class="btn btn-primary btn-block">登入</button>
+            <button type="button" id="localModeBtn" class="btn btn-secondary btn-block">先以本機示範模式瀏覽</button>
+            <p id="loginMessage" class="login-message"></p>
+        </form>
+    </div>
+
+    <div id="modalRoot"></div>
+    <div id="toastRoot" class="toast-root"></div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

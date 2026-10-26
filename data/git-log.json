@@ -1,0 +1,165 @@
+{
+  "generatedAt": "2026-10-26T16:03:45.713Z",
+  "count": 1,
+  "commits": [
+    {
+      "sha": "f6e43e8b09a206f8f93b67ca1f51df7d91924125",
+      "shortSha": "f6e43e8",
+      "author": "Johny4869",
+      "date": "2026-10-27T00:03:44+08:00",
+      "subject": "Initial commit: project case tracker platform",
+      "files": [
+        {
+          "filename": ".env.example",
+          "status": "added",
+          "additions": 5,
+          "deletions": 0
+        },
+        {
+          "filename": ".github/workflows/ci.yml",
+          "status": "added",
+          "additions": 25,
+          "deletions": 0
+        },
+        {
+          "filename": ".github/workflows/pages.yml",
+          "status": "added",
+          "additions": 64,
+          "deletions": 0
+        },
+        {
+          "filename": ".gitignore",
+          "status": "added",
+          "additions": 46,
+          "deletions": 0
+        },
+        {
+          "filename": "RAG驗證結果報告.example.md",
+          "status": "added",
+          "additions": 65,
+          "deletions": 0
+        },
+        {
+          "filename": "README.md",
+          "status": "added",
+          "additions": 131,
+          "deletions": 0
+        },
+        {
+          "filename": "app.js",
+          "status": "added",
+          "additions": 887,
+          "deletions": 0
+        },
+        {
+          "filename": "config.example.js",
+          "status": "added",
+          "additions": 15,
+          "deletions": 0
+        },
+        {
+          "filename": "data/git-log.json",
+          "status": "added",
+          "additions": 165,
+          "deletions": 0
+        },
+        {
+          "filename": "index.html",
+          "status": "added",
+          "additions": 189,
+          "deletions": 0
+        },
+        {
+          "filename": "package.json",
+          "status": "added",
+          "additions": 31,
+          "deletions": 0
+        },
+        {
+          "filename": "scripts/check-dom.mjs",
+          "status": "added",
+          "additions": 27,
+          "deletions": 0
+        },
+        {
+          "filename": "scripts/gen-config.mjs",
+          "status": "added",
+          "additions": 30,
+          "deletions": 0
+        },
+        {
+          "filename": "scripts/gen-gitlog.mjs",
+          "status": "added",
+          "additions": 66,
+          "deletions": 0
+        },
+        {
+          "filename": "scripts/serve.mjs",
+          "status": "added",
+          "additions": 49,
+          "deletions": 0
+        },
+        {
+          "filename": "scripts/smoke.mjs",
+          "status": "added",
+          "additions": 51,
+          "deletions": 0
+        },
+        {
+          "filename": "scripts/test-local.mjs",
+          "status": "added",
+          "additions": 80,
+          "deletions": 0
+        },
+        {
+          "filename": "scripts/verify-supabase.mjs",
+          "status": "added",
+          "additions": 60,
+          "deletions": 0
+        },
+        {
+          "filename": "src/db.js",
+          "status": "added",
+          "additions": 406,
+          "deletions": 0
+        },
+        {
+          "filename": "src/rag.js",
+          "status": "added",
+          "additions": 25,
+          "deletions": 0
+        },
+        {
+          "filename": "src/storage.js",
+          "status": "added",
+          "additions": 57,
+          "deletions": 0
+        },
+        {
+          "filename": "src/supabaseClient.js",
+          "status": "added",
+          "additions": 17,
+          "deletions": 0
+        },
+        {
+          "filename": "styles.css",
+          "status": "added",
+          "additions": 232,
+          "deletions": 0
+        },
+        {
+          "filename": "supabase/migrations/0001_init.sql",
+          "status": "added",
+          "additions": 280,
+          "deletions": 0
+        },
+        {
+          "filename": "個人專案追蹤平台架構與開發路線圖.png",
+          "status": "added",
+          "additions": 0,
+          "deletions": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax check
+        run: npm run lint
+      - name: Local logic tests
+        run: npm test
+      - name: DOM selector check
+        run: node scripts/check-dom.mjs
+      - name: Generate git log snapshot (verify script works)
+        run: node scripts/gen-gitlog.mjs
